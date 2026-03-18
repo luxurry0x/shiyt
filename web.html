@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIBA ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.2);
+            --neon-pink: #ff4d94;
+            --purple-dark: #4a148c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* الخلفية GIF */
+        .bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://i.pinimg.com/originals/a2/37/87/a2378786b704af02e2ae1c15f25d54d7.gif') no-repeat center center;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        /* شاشة البداية لتفعيل الصوت */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .content {
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            color: #fff;
+            text-shadow: 5px 5px 0 var(--purple-dark);
+            margin-bottom: 10px;
+        }
+
+        .sub-title {
+            color: #fff;
+            font-size: 0.7rem;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 30px;
+        }
+
+        /* مكان أيقونة الفيسبوك المحلية */
+        .fb-link {
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+            transition: 0.2s;
+        }
+
+        .fb-link img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* إذا كانت أيقونتك بكسل، هذا السطر يحافظ على حدتها */
+            image-rendering: pixelated; 
+        }
+
+        .fb-link:hover { transform: scale(1.1); }
+
+        /* المشغل الشفاف */
+        .glass-player {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 4px solid #fff;
+            padding: 20px;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.3);
+        }
+
+        .song-info {
+            font-size: 0.5rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            font-family: 'Press Start 2P';
+            padding: 10px 15px;
+            border: 3px solid #fff;
+            background: var(--neon-pink);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 4px 4px 0 var(--purple-dark);
+            margin: 5px;
+            font-size: 0.6rem;
+        }
+
+        .btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0; }
+
+        #progress {
+            width: 100%;
+            margin-top: 15px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border: 2px solid #fff;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        #progress::-webkit-slider-thumb {
+            appearance: none; width: 15px; height: 15px; background: #fff; border: 2px solid var(--purple-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <p>✨ HIBA ✨</p>
+        <br><br>
+        <p>[ CLICK TO ENTER ]</p>
+    </div>
+
+    <div class="bg"></div>
+
+    <div class="content">
+        <h1>HIBA</h1>
+        <p class="sub-title">She's just a girl</p>
+        
+        <a href="https://www.facebook.com/haru.yo.229327" target="_blank" class="fb-link">
+            <img src="facebook.png" alt="FB"> 
+        </a>
+
+        <div class="glass-player">
+            <p class="song-info">♪ Agora Hills - Doja Cat</p>
+            <audio id="audio" src="Doja Cat - Agora Hills (Official Video).mp3" loop></audio>
+            <div>
+                <button class="btn" id="playBtn">PLAY</button>
+                <button class="btn" id="stopBtn">STOP</button>
+            </div>
+            <input type="range" id="progress" value="0">
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const overlay = document.getElementById('overlay');
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const progress = document.getElementById('progress');
+
+        // بدء التطبيق
+        const startApp = () => {
+            audio.currentTime = 36; // تبدأ من الدقيقة 0:36
+            audio.play();
+            overlay.style.display = 'none';
+            playBtn.innerText = "PAUSE";
+        };
+
+        overlay.addEventListener('click', startApp);
+
+        playBtn.onclick = () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "PAUSE";
+            } else {
+                audio.pause();
+                playBtn.innerText = "PLAY";
+            }
+        };
+
+        stopBtn.onclick = () => {
+            audio.pause();
+            audio.currentTime = 0;
+            playBtn.innerText = "PLAY";
+        };
+
+        audio.ontimeupdate = () => {
+            if (audio.duration) {
+                progress.value = (audio.currentTime / audio.duration) * 100;
+            }
+        };
+
+        progress.oninput = () => {
+            audio.currentTime = (progress.value / 100) * audio.duration;
+        };
+    </script>
+</body>
+</html>
